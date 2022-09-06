@@ -9,19 +9,15 @@ package br.eng.joaovictor.assistant.presentation
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.wear.compose.material.MaterialTheme
-import androidx.wear.compose.material.Text
+import androidx.compose.ui.unit.dp
+import androidx.wear.compose.material.*
 import br.eng.joaovictor.assistant.R
 import br.eng.joaovictor.assistant.presentation.theme.AssistantTheme
 
@@ -29,26 +25,46 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            WearApp("Android")
+            WearApp()
         }
     }
 }
 
 @Composable
-fun WearApp(greetingName: String) {
+fun WearApp() {
     AssistantTheme {
+        val listState = rememberScalingLazyListState()
+
         /* If you have enough items in your list, use [ScalingLazyColumn] which is an optimized
          * version of LazyColumn for wear devices with some added features. For more information,
          * see d.android.com/wear/compose.
          */
-        Column(
-                modifier = Modifier
-                        .fillMaxSize()
-                        .background(MaterialTheme.colors.background),
-                verticalArrangement = Arrangement.Center
-        ) {
-            Greeting(greetingName = greetingName)
-        }
+        Scaffold(
+            timeText = { TimeText() },
+            vignette = { Vignette(vignettePosition = VignettePosition.TopAndBottom) },
+            content = { ListFunctions(listState = listState) },
+            positionIndicator = { PositionIndicator(scalingLazyListState = listState) }
+        )
+    }
+}
+
+@Composable
+fun ListFunctions(listState: ScalingLazyListState){
+    ScalingLazyColumn(
+        modifier = Modifier.fillMaxSize(),
+        contentPadding = PaddingValues(
+            top = 32.dp,
+            start = 8.dp,
+            end = 8.dp,
+            bottom = 32.dp
+        ),
+        verticalArrangement = Arrangement.Center,
+        state = listState
+    ){
+        item { Greeting(greetingName = "teste") }
+        item { Greeting(greetingName = "teste2") }
+        item { Greeting(greetingName = "teste3") }
+        item { Greeting(greetingName = "teste4") }
     }
 }
 
@@ -65,5 +81,5 @@ fun Greeting(greetingName: String) {
 @Preview(device = Devices.WEAR_OS_SMALL_ROUND, showSystemUi = true)
 @Composable
 fun DefaultPreview() {
-    WearApp("Preview Android")
+    WearApp()
 }
