@@ -1,4 +1,4 @@
-package br.eng.joaovictor.assistant.domain.use_case
+package br.eng.joaovictor.assistant.domain.use_case.task
 
 import br.eng.joaovictor.assistant.data.datasource.model.Task
 import br.eng.joaovictor.assistant.domain.repository.TaskRepository

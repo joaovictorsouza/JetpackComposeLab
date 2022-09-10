@@ -5,4 +5,4 @@ import android.os.Bundle
 import dagger.hilt.android.HiltAndroidApp
 
 @HiltAndroidApp
-class NoteApp : Application()
+class AssistantApp : Application()

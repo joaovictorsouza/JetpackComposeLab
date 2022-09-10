@@ -6,11 +6,10 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import br.eng.joaovictor.assistant.feature.home.HomePage
+import br.eng.joaovictor.assistant.presentation.home.HomePage
 import br.eng.joaovictor.assistant.presentation.ui.theme.AssistantTheme
 
 class MainActivity : ComponentActivity() {
