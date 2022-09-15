@@ -13,14 +13,16 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import br.eng.joaovictor.assistant.feature.home.presentation.theme.AssistantTheme
+import br.eng.joaovictor.assistant.presentation.util.Screen
 
 @Composable
-fun HomePage() {
+fun HomePage(navController: NavController) {
     AssistantTheme {
         Scaffold(
             topBar = { TopAppBar(title = {Text("Assistente")}) },
-            floatingActionButton = { AddNewFAB()},
+            floatingActionButton = { AddNewFAB(navController)},
             floatingActionButtonPosition = FabPosition.End,
             content = { innerPadding ->
                 LazyColumn(
@@ -35,9 +37,9 @@ fun HomePage() {
 }
 
 @Composable
-fun AddNewFAB(){
+fun AddNewFAB(navController: NavController){
     ExtendedFloatingActionButton(
-        onClick = { /*TODO*/ },
+        onClick = { navController.navigate(Screen.AddEditTask.route) },
     ) {
         Icon(Icons.Filled.Add, "Adicionar nova tarefa")
         Spacer(modifier = Modifier.width(6.dp))
