@@ -1,7 +1,7 @@
-package br.eng.joaovictor.assistant.domain.use_case.task
+package br.eng.joaovictor.assistant.di.domain.use_case.task
 
 import br.eng.joaovictor.assistant.data.datasource.model.Task
-import br.eng.joaovictor.assistant.domain.repository.TaskRepository
+import br.eng.joaovictor.assistant.di.domain.repository.TaskRepository
 import kotlinx.coroutines.flow.Flow
 
 class GetAllTasks(
