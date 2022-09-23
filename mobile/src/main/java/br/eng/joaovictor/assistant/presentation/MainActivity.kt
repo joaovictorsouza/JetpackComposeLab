@@ -30,7 +30,7 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     val navController = rememberNavController()
-                    NavHost(navController = navController, startDestination = Screen.Home.route) {
+                    NavHost(navController = navController, startDestination = Screen.AddEditTask.route) {
                         composable(Screen.Home.route) {
                             HomePage(navController = navController)
                         }
