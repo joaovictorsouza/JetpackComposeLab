@@ -2,7 +2,7 @@ package br.eng.joaovictor.assistant.presentation.home
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
-import br.eng.joaovictor.assistant.domain.use_case.task.TaskUseCases
+import br.eng.joaovictor.assistant.di.domain.use_case.task.TaskUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 

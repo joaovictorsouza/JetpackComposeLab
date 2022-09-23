@@ -1,35 +1,31 @@
-@file:OptIn(ExperimentalMaterialApi::class)
 
 package br.eng.joaovictor.assistant.presentation.add_edit_task
 
 
 import android.annotation.SuppressLint
-import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.material.IconButton
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.geometry.Size
-import androidx.compose.ui.graphics.*
-import androidx.compose.ui.graphics.drawscope.rotate
-import androidx.compose.ui.graphics.drawscope.scale
-import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import br.eng.joaovictor.assistant.R
 import br.eng.joaovictor.assistant.feature.home.presentation.theme.AssistantTheme
+import br.eng.joaovictor.assistant.presentation.add_edit_task.components.AddTaskHeader
+import br.eng.joaovictor.assistant.presentation.add_edit_task.components.TaskTypeSelection
+import kotlinx.coroutines.flow.collectLatest
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class)
@@ -38,11 +34,47 @@ fun AddEditTaskScreen(
     navController: NavController,
     viewModel: AddEditTaskViewModel = hiltViewModel(),
 ) {
-    val state = viewModel.state.value
-    val configuration = LocalConfiguration.current
-    val width = configuration.screenWidthDp
+    val state = remember {viewModel.state}.value
+
+    val snackbarHostState = remember { SnackbarHostState() }
+    val scope = rememberCoroutineScope()
+    val context = LocalContext.current
+
+    val successMessage = stringResource(R.string.add_task_success_message)
+
+    LaunchedEffect(key1 = true) {
+        viewModel.eventFlow.collectLatest { event ->
+            when (event) {
+                is AddTaskUIEvent.ShowSnackbar -> {
+                    snackbarHostState.showSnackbar(
+                        message = event.message.asString(context),
+                    )
+                }
+                is AddTaskUIEvent.SaveNote -> {
+                    snackbarHostState.showSnackbar(
+                        message = successMessage,
+                    )
+                }
+            }
+        }
+    }
+
     AssistantTheme {
         Scaffold(
+            snackbarHost = {
+                SnackbarHost(
+                    hostState = snackbarHostState,
+                    modifier = Modifier
+                        .navigationBarsPadding(),
+                    snackbar = { data ->
+                        Snackbar(
+                            snackbarData = data,
+                            modifier = Modifier
+                                .navigationBarsPadding()
+                        )
+                    }
+                )
+            },
             topBar = {
                 TopAppBar(
                     colors = TopAppBarDefaults.centerAlignedTopAppBarColors(containerColor = Color.Transparent),
@@ -51,7 +83,7 @@ fun AddEditTaskScreen(
                         IconButton(onClick = { navController.popBackStack() }) {
                             Icon(
                                 imageVector = Icons.Default.ArrowBack,
-                                contentDescription = "Voltar"
+                                contentDescription = stringResource(R.string.text_back)
                             )
                         }
                     }
@@ -59,143 +91,72 @@ fun AddEditTaskScreen(
             },
             content = {
                 Column(
-            modifier = Modifier
-                .fillMaxSize(),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.SpaceBetween
-        ) {
-            Box(
-                Modifier
-                    .width((width * 1.5).dp)
-                    .offset(y = (-60).dp)
-                    .wrapContentSize(unbounded = true)
-            ) {
-                CreateIcon(true)
-            }
-            Row() {
-                Column(
+                    modifier = Modifier
+                        .fillMaxSize(),
                     horizontalAlignment = Alignment.CenterHorizontally,
-                    modifier = Modifier.padding(top = 16.dp),
+                    verticalArrangement = Arrangement.SpaceBetween
+                ) {
+
+                    AddTaskHeader(title = stringResource(R.string.add_task_step1_title), description = stringResource(R.string.add_task_step1_description))
+
+
+                    TaskTypeSelection(
+                        selectedType = state.type,
+                        onSelected = { viewModel.onEvent(AddEditTaskEvent.OnTaskTypeChipClicked(it)) }
+                    )
+
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth(),
+                        horizontalArrangement = Arrangement.Center
                     ) {
-                    Text(
-                        modifier = Modifier.padding(start = 20.dp, end = 20.dp),
-                        text = "Vamos começar a planejar?",
-                        style = MaterialTheme.typography.headlineMedium,
-                        textAlign = TextAlign.Center,
-                    )
-                    Text(
-                        modifier = Modifier.padding(start = 16.dp, end = 16.dp),
-                        text = "Primeiro você precisa decidir se isso é um hábito, uma tarefa recorrente ou uma tarefa de instância única.",
-                        style = MaterialTheme.typography.bodyLarge,
-                        textAlign = TextAlign.Center,
-                    )
-                }
-            }
-            LazyRow(
-                Modifier.fillMaxWidth(),
-                contentPadding = PaddingValues(horizontal = 30.dp),
-                horizontalArrangement = Arrangement.SpaceBetween){
-                item {
-                    ElevatedSuggestionChip(
-                        onClick = { /*TODO*/ },
-                        label = { Text("Hábito", color = MaterialTheme.colorScheme.surfaceTint) },
-                        interactionSource = remember { MutableInteractionSource() },
-                        enabled = false
-
-                    )
-                }
-                item {
-                    ElevatedSuggestionChip(
-                        onClick = { /*TODO*/ },
-                        label = { Text("Tarefa Recorrente", color = MaterialTheme.colorScheme.surfaceTint) },
-                        interactionSource = remember { MutableInteractionSource() },
-                        )
-                }
-                item {
-                    ElevatedSuggestionChip(
-                        onClick = { /*TODO*/ },
-                        label = { Text("Tarefa", color = MaterialTheme.colorScheme.surfaceTint) },
-                        interactionSource = remember { MutableInteractionSource() },
-                        )
-                }
-            }
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth(),
-                horizontalArrangement = Arrangement.Center
-            ) {
-                OutlinedTextField(
-                    modifier = Modifier.fillMaxWidth(.9f),
-                    label = { Text("Título") },
-                    placeholder = { Text("Dê um nome a sua tarefa") },
-                    value = state.title,
-                    onValueChange = { viewModel.onEvent(AddEditTaskEvent.OnTaskTitleChanged(it)) })
-            }
-
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(start = 5.dp, end = 5.dp, bottom = 5.dp)
-                    .weight(1f, false),
-                horizontalArrangement = Arrangement.SpaceBetween
-            ){
-                Button(onClick = { /*TODO*/ },
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = MaterialTheme.colorScheme.secondaryContainer,
-                        contentColor = MaterialTheme.colorScheme.onSecondaryContainer),
-                    content = { Text("CANCELAR")
-                })
-                Button(onClick = { /*TODO*/ },
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = MaterialTheme.colorScheme.primaryContainer,
-                        contentColor = MaterialTheme.colorScheme.onPrimaryContainer),
-                    content = { Text("CONTINUAR")
+                        OutlinedTextField(
+                            modifier = Modifier.fillMaxWidth(.9f),
+                            label = { Text("Título") },
+                            placeholder = { Text(text = stringResource(id = R.string.add_task_title_placeholder)) },
+                            value = state.title,
+                            isError = state.isTitleInvalid,
+                            onValueChange = {
+                                viewModel.onEvent(
+                                    AddEditTaskEvent.OnTaskTitleChanged(
+                                        it
+                                    )
+                                )
+                            })
                     }
 
-                )
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(start = 5.dp, end = 5.dp, bottom = 5.dp)
+                            .weight(1f, false),
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Button(
+                            onClick = { navController.popBackStack() },
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = MaterialTheme.colorScheme.secondaryContainer,
+                                contentColor = MaterialTheme.colorScheme.onSecondaryContainer
+                            ),
+                            content = {
+                                Text(stringResource(id = R.string.buttom_cancel_captilized))
+                            })
+                        Button(
+                            onClick = { viewModel.onEvent(AddEditTaskEvent.OnSaveTask) },
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = MaterialTheme.colorScheme.primaryContainer,
+                                contentColor = MaterialTheme.colorScheme.onPrimaryContainer
+                            ),
+                            content = {
+                                Text(stringResource(id = R.string.buttom_continue_captilized))
+                            }
 
-            }
+                        )
 
-        }
+                    }
 
-        })
-    }
-}
+                }
 
-@Composable
-fun CreateIcon(isLarge : Boolean = false) {
-    val colors = listOf(MaterialTheme.colorScheme.onPrimary, MaterialTheme.colorScheme.primaryContainer)
-    val painter = painterResource(id = R.drawable.ic_add_task)
-    val scaleImg = if (isLarge) 0.99f else .5f
-    val heightImgScale = if (isLarge) 30f else .20f
-    val widthImgScale = if (isLarge) 40f else .6f
-    val drawSize = if (isLarge) 400.dp else 180.dp
-    val imgColor = MaterialTheme.colorScheme.onPrimaryContainer
-
-    Canvas(
-        modifier = Modifier
-            .size(drawSize)) {
-        rotate(degrees = 45f){
-        drawOval(
-            size = Size(
-                width = drawSize.toPx(),
-                height = drawSize.toPx()*1.3f - 50.dp.toPx()
-            ),
-            topLeft = Offset(
-                x = 50.dp.toPx(),
-                y = 0.dp.toPx()
-            ),
-            brush = Brush.linearGradient(colors = colors)
-
-        )
-        }
-            with(painter) {
-                scale(scale = scaleImg, pivot = Offset(size.width * widthImgScale, size.height * heightImgScale)) {
-                draw(size = painter.intrinsicSize,
-                    alpha = 1f,
-                    colorFilter = ColorFilter.tint(imgColor))
-            }
-        }
-
+            })
     }
 }

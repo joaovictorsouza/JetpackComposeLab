@@ -4,9 +4,10 @@ import android.app.Application
 import androidx.room.Room
 import br.eng.joaovictor.assistant.data.datasource.AssistantDb
 import br.eng.joaovictor.assistant.data.repository.TaskRepositoryImpl
-import br.eng.joaovictor.assistant.domain.repository.TaskRepository
-import br.eng.joaovictor.assistant.domain.use_case.task.GetAllTasks
-import br.eng.joaovictor.assistant.domain.use_case.task.TaskUseCases
+import br.eng.joaovictor.assistant.di.domain.repository.TaskRepository
+import br.eng.joaovictor.assistant.di.domain.use_case.task.AddTask
+import br.eng.joaovictor.assistant.di.domain.use_case.task.GetAllTasks
+import br.eng.joaovictor.assistant.di.domain.use_case.task.TaskUseCases
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -37,7 +38,8 @@ object AppModule {
     @Singleton
     fun provideTaskUseCases(repository: TaskRepository) : TaskUseCases {
         return TaskUseCases(
-            getAllTasks = GetAllTasks(repository)
+            getAllTasks = GetAllTasks(repository),
+            addTask = AddTask(repository)
         )
     }
 
