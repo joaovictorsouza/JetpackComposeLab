@@ -6,14 +6,11 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import br.eng.joaovictor.assistant.presentation.add_edit_task.AddEditTaskScreen
-import br.eng.joaovictor.assistant.presentation.home.HomePage
+import br.eng.joaovictor.assistant.presentation.task_list.TaskListScreen
 import br.eng.joaovictor.assistant.presentation.ui.theme.AssistantTheme
 import br.eng.joaovictor.assistant.presentation.util.Screen
 import dagger.hilt.android.AndroidEntryPoint
@@ -30,12 +27,9 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     val navController = rememberNavController()
-                    NavHost(navController = navController, startDestination = Screen.AddEditTask.route) {
+                    NavHost(navController = navController, startDestination = Screen.Home.route) {
                         composable(Screen.Home.route) {
-                            HomePage(navController = navController)
-                        }
-                        composable(Screen.AddEditTask.route) {
-                            AddEditTaskScreen(navController = navController)
+                            TaskListScreen(navController = navController)
                         }
                     }
                 }

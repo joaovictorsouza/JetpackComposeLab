@@ -12,10 +12,13 @@ import br.eng.joaovictor.assistant.data.datasource.model.Task
 import br.eng.joaovictor.assistant.di.domain.use_case.task.TaskUseCases
 import br.eng.joaovictor.assistant.di.domain.util.InvalidTaskException
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -51,6 +54,7 @@ class AddEditTaskViewModel @Inject constructor(
                                 uid = 0,
                                 title = state.value.title,
                                 type = state.value.type,
+                                description = "",
                                 createdAt = 0,
                                 updatedAt = 0
                             )
@@ -77,4 +81,6 @@ class AddEditTaskViewModel @Inject constructor(
             }
         }
     }
+
+
 }

@@ -14,6 +14,9 @@ data class Task(
     @ColumnInfo(name = "title")
     val title: String,
 
+    @ColumnInfo(name = "description")
+    val description: String,
+
     @TypeConverters(TaskTypeConverters::class)
     @ColumnInfo(name = "type")
     val type: TaskTypeEnum,

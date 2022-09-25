@@ -13,4 +13,5 @@
     <string name="chip_task">Tarefa</string>
     <string name="text_back">Voltar</string>
     <string name="add_task_success_message">A tarefa foi salva com sucesso!</string>
+    <string name="label_add_task">Adicionar Tarefa</string>
 </resources>

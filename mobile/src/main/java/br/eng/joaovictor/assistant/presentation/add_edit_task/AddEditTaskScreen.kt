@@ -75,35 +75,46 @@ fun AddEditTaskScreen(
                     }
                 )
             },
-            topBar = {
-                TopAppBar(
-                    colors = TopAppBarDefaults.centerAlignedTopAppBarColors(containerColor = Color.Transparent),
-                    title = {},
-                    navigationIcon = {
-                        IconButton(onClick = { navController.popBackStack() }) {
-                            Icon(
-                                imageVector = Icons.Default.ArrowBack,
-                                contentDescription = stringResource(R.string.text_back)
-                            )
+            bottomBar = {
+                        BottomAppBar(){
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(start = 5.dp, end = 5.dp, bottom = 5.dp),
+                                horizontalArrangement = Arrangement.SpaceBetween
+                            ) {
+                                Button(
+                                    onClick = { navController.popBackStack() },
+                                    colors = ButtonDefaults.buttonColors(
+                                        containerColor = MaterialTheme.colorScheme.secondaryContainer,
+                                        contentColor = MaterialTheme.colorScheme.onSecondaryContainer
+                                    ),
+                                    content = {
+                                        Text(stringResource(id = R.string.buttom_cancel_captilized))
+                                    })
+                                Button(
+                                    onClick = { viewModel.onEvent(AddEditTaskEvent.OnSaveTask) },
+                                    colors = ButtonDefaults.buttonColors(
+                                        containerColor = MaterialTheme.colorScheme.primaryContainer,
+                                        contentColor = MaterialTheme.colorScheme.onPrimaryContainer
+                                    ),
+                                    content = {
+                                        Text(stringResource(id = R.string.buttom_continue_captilized))
+                                    }
+
+                                )
+
+                            }
                         }
-                    }
-                )
             },
             content = {
                 Column(
                     modifier = Modifier
-                        .fillMaxSize(),
+                        .fillMaxHeight(.5f),
                     horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.SpaceBetween
+                    verticalArrangement = Arrangement.Top
                 ) {
 
-                    AddTaskHeader(title = stringResource(R.string.add_task_step1_title), description = stringResource(R.string.add_task_step1_description))
-
-
-                    TaskTypeSelection(
-                        selectedType = state.type,
-                        onSelected = { viewModel.onEvent(AddEditTaskEvent.OnTaskTypeChipClicked(it)) }
-                    )
 
                     Row(
                         modifier = Modifier
@@ -125,35 +136,10 @@ fun AddEditTaskScreen(
                             })
                     }
 
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(start = 5.dp, end = 5.dp, bottom = 5.dp)
-                            .weight(1f, false),
-                        horizontalArrangement = Arrangement.SpaceBetween
-                    ) {
-                        Button(
-                            onClick = { navController.popBackStack() },
-                            colors = ButtonDefaults.buttonColors(
-                                containerColor = MaterialTheme.colorScheme.secondaryContainer,
-                                contentColor = MaterialTheme.colorScheme.onSecondaryContainer
-                            ),
-                            content = {
-                                Text(stringResource(id = R.string.buttom_cancel_captilized))
-                            })
-                        Button(
-                            onClick = { viewModel.onEvent(AddEditTaskEvent.OnSaveTask) },
-                            colors = ButtonDefaults.buttonColors(
-                                containerColor = MaterialTheme.colorScheme.primaryContainer,
-                                contentColor = MaterialTheme.colorScheme.onPrimaryContainer
-                            ),
-                            content = {
-                                Text(stringResource(id = R.string.buttom_continue_captilized))
-                            }
-
-                        )
-
-                    }
+                    TaskTypeSelection(
+                        selectedType = state.type,
+                        onSelected = { viewModel.onEvent(AddEditTaskEvent.OnTaskTypeChipClicked(it)) }
+                    )
 
                 }
 

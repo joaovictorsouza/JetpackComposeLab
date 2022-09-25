@@ -28,14 +28,6 @@ fun AddTaskHeader(title : String, description : String, modifier: Modifier = Mod
         Column(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Box(
-                Modifier
-                    .width((width * 1.5).dp)
-                    .offset(y = (-76).dp)
-                    .wrapContentSize(unbounded = true)
-            ) {
-                CreateIcon(true)
-            }
             Spacer(modifier = modifier.height(16.dp))
             Text(
                 modifier = Modifier.padding(start = 20.dp, end = 20.dp),

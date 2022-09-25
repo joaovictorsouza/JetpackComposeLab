@@ -25,8 +25,22 @@ fun TaskTypeSelection(selectedType: TaskTypeEnum, onSelected: (TaskTypeEnum) -> 
     LazyRow(
         Modifier.fillMaxWidth(),
         contentPadding = PaddingValues(horizontal = 30.dp),
-        horizontalArrangement = Arrangement.SpaceBetween
+        horizontalArrangement = Arrangement.spacedBy(16.dp),
+
     ) {
+        item {
+            InputChip(
+                selected = selectedType == TaskTypeEnum.TASK,
+                onClick = { onSelected(TaskTypeEnum.TASK) },
+                label = {
+                    Text(
+                        stringResource(R.string.chip_task),
+                        color = MaterialTheme.colorScheme.surfaceTint
+                    )
+                },
+                interactionSource = remember { MutableInteractionSource() },
+            )
+        }
         item {
             InputChip(
                 selected = selectedType == TaskTypeEnum.HABIT,
@@ -41,32 +55,6 @@ fun TaskTypeSelection(selectedType: TaskTypeEnum, onSelected: (TaskTypeEnum) -> 
 
                 )
         }
-        item {
-            InputChip(
-                selected = selectedType == TaskTypeEnum.RECURRENT_TASK,
-                onClick = { onSelected(TaskTypeEnum.RECURRENT_TASK) },
 
-                label = {
-                    Text(
-                        stringResource(R.string.chip_recurrent_task),
-                        color = MaterialTheme.colorScheme.surfaceTint
-                    )
-                },
-                interactionSource = remember { MutableInteractionSource() },
-            )
-        }
-        item {
-            InputChip(
-                selected = selectedType == TaskTypeEnum.TASK,
-                onClick = { onSelected(TaskTypeEnum.TASK) },
-                label = {
-                    Text(
-                        stringResource(R.string.chip_task),
-                        color = MaterialTheme.colorScheme.surfaceTint
-                    )
-                },
-                interactionSource = remember { MutableInteractionSource() },
-            )
-        }
     }
 }
