@@ -1,4 +1,16 @@
 <resources>
     <string name="app_name">Assistant</string>
-    <string name="title_activity_main">MainActivity</string>
+    <string name="add_task_generic_error">Não foi possível salvar a nota.</string>
+    <string name="add_task_empty_title_error">O título da tarefa não pode estar vazio.</string>
+    <string name="add_task_title_label">Título</string>
+    <string name ="add_task_title_placeholder">Dê um nome a sua tarefa</string>
+    <string name="add_task_step1_title">Vamos começar a planejar?</string>
+    <string name="add_task_step1_description">Primeiro você precisa decidir se isso é um hábito, uma tarefa recorrente ou uma tarefa de instância única.</string>
+    <string name="buttom_continue_captilized">CONTINUAR</string>
+    <string name="buttom_cancel_captilized">CANCELAR</string>
+    <string name="chip_habit">Hábito</string>
+    <string name="chip_recurrent_task">Tarefa Recorrente</string>
+    <string name="chip_task">Tarefa</string>
+    <string name="text_back">Voltar</string>
+    <string name="add_task_success_message">A tarefa foi salva com sucesso!</string>
 </resources>
